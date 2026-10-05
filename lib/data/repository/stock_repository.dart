@@ -15,20 +15,14 @@ class StockRepository {
       return [];
     }
 
-    // 1. 메타데이터 조회
     final metadataList = await Future.wait(symbols.map(_fetchMetadata));
-
-    // 2. 실시간 시세 원본 응답
     final realtimeJson = await _api.fetchRealtimeQuotes(symbols);
-
-    // 실제 응답 구조 확인 후 여기 파싱 로직 확정
     final quotes = _parseRealtimeQuotes(realtimeJson);
 
     final quoteMap = <String, RealtimeQuoteDto>{
       for (final quote in quotes) quote.symbol: quote,
     };
 
-    // 3. metadata + quote 결합
     return metadataList.map((metadata) {
       final quote = quoteMap[metadata.symbol];
 

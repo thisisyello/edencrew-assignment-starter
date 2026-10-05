@@ -76,8 +76,6 @@ class _SearchScreenState extends State<SearchScreen> {
       _isSearching = true;
     });
 
-    // 검색 도중 사용자가 다른 문자를 입력했을 때
-    // 오래된 응답으로 화면이 덮이는 것을 방지
     final requestedQuery = query;
 
     try {

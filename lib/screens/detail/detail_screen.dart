@@ -30,7 +30,6 @@ class _DetailScreenState extends State<DetailScreen> {
   Stock? _stock;
   List<DailyCandleDto> _candles = [];
 
-  // 등락 계산용. 표시 기간보다 앞의 데이터도 포함
   List<DailyCandleDto> _calculationCandles = [];
 
   DetailPeriod _period = DetailPeriod.oneMonth;
@@ -92,11 +91,7 @@ class _DetailScreenState extends State<DetailScreen> {
     });
 
     final end = DateTime.now();
-
     final displayStart = period.startDate(end);
-
-    // 첫 표시 날짜의 전일 종가 계산을 위해
-    // 조금 더 앞쪽 데이터까지 요청한다.
     final requestStart = displayStart.subtract(const Duration(days: 7));
 
     try {

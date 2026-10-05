@@ -77,7 +77,6 @@ class _CandlestickPainter extends CustomPainter {
       return topPadding + chartHeight * (1 - ratio);
     }
 
-    // 가로 보조선
     final axisPaint = Paint()
       ..color = axisColor
       ..strokeWidth = 1;
@@ -89,8 +88,6 @@ class _CandlestickPainter extends CustomPainter {
     }
 
     final slotWidth = size.width / candles.length;
-
-    // 기간이 길어질수록 자동으로 캔들이 얇아짐
     final bodyWidth = math.max(1.0, math.min(8.0, slotWidth * 0.55));
 
     for (var i = 0; i < candles.length; i++) {
@@ -117,14 +114,10 @@ class _CandlestickPainter extends CustomPainter {
       final openY = priceToY(candle.open);
       final closeY = priceToY(candle.close);
 
-      // 고가 ~ 저가 꼬리
       canvas.drawLine(Offset(centerX, highY), Offset(centerX, lowY), paint);
 
       final bodyTop = math.min(openY, closeY);
-
       final bodyBottom = math.max(openY, closeY);
-
-      // 시가 == 종가인 경우에도 최소 높이 확보
       final bodyHeight = math.max(1.0, bodyBottom - bodyTop);
 
       final rect = Rect.fromLTWH(
