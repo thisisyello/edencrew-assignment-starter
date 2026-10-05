@@ -27,8 +27,8 @@ No issues found!
 
 ### 폰트
 프로젝트에서 제공된 `AppTypography` 및 테마 구성을 사용했습니다.
-Figma Typography 변수에 정의된 font family / weight는 `AppTypography`를 사용하고,
-font size / line height / letter spacing은 각 Figma 텍스트 레이어의 값을 적용했습니다.
+
+Figma Typography 변수에 정의된 font family / weight는 `AppTypography`를 사용하고, font size / line height / letter spacing은 각 Figma 텍스트 레이어의 값을 적용했습니다.
 
 ## 2. 구현 범위
 
@@ -61,6 +61,7 @@ font size / line height / letter spacing은 각 Figma 텍스트 레이어의 값
 - Candlestick Chart
 - 시가 / 고가 / 저가 / 거래량 / 시가총액 표시
 - 일별 종가 / 등락 / 거래량 표시
+- 기능 구현은 완료했으나 일부 세부 레이아웃 및 시각적 표현은 Figma와 차이가 있습니다.
 
 ### 공통 상태
 관심종목 상태는 `FavoriteStore`에서 관리하여 관심 화면, 검색 화면, 상세 화면에서 동일한 상태를 공유하도록 구현했습니다.
@@ -72,7 +73,8 @@ font size / line height / letter spacing은 각 Figma 텍스트 레이어의 값
 
 ### 테스트
 별도의 단위 테스트는 작성하지 않았습니다.
-대신 실제 실행을 통해 주요 화면 이동 및 관심종목 상태 동기화를 확인했고, flutter analyze 결과 No issues found!를 확인했습니다.
+
+대신 실제 실행을 통해 주요 화면 이동 및 관심종목 상태 동기화를 확인했고, `flutter analyze` 결과 `No issues found!`를 확인했습니다.
 
 ## 3. 기술 선택과 이유
 
@@ -101,7 +103,9 @@ API 응답 DTO와 화면에서 사용하는 모델을 분리하고, 화면에서
 
 ### API
 Naver Finance API를 사용했습니다.
+
 관심종목 현재가는 종목별로 각각 요청하지 않고, 여러 symbol을 한 번의 realtime 요청으로 조회하도록 구현했습니다.
+
 종목명과 시장 정보는 metadata API에서 가져오고, 실시간 시세 데이터와 결합하여 화면 모델을 생성했습니다.
 
 ### 주요 패키지
@@ -111,6 +115,7 @@ Naver Finance API를 사용했습니다.
 
 ### 차트
 Candlestick Chart는 별도의 차트 패키지를 추가하지 않고 Flutter `CustomPainter`로 구현했습니다.
+
 일봉의 시가 / 고가 / 저가 / 종가 데이터를 직접 좌표로 변환하여 wick과 candle body를 그리는 방식으로 구현했습니다.
 
 ### 디자인 토큰
@@ -118,17 +123,18 @@ Candlestick Chart는 별도의 차트 패키지를 추가하지 않고 Flutter `
 - Color: `context.colors`
 - Spacing / Radius / Size: `context.dimens`
 - Font family / weight: `AppTypography`
-Figma에만 존재하고 기존 토큰에 정의되지 않은
-font size, line height, letter spacing 등의 값은 화면에서 직접 적용했습니다.
+Figma에만 존재하고 기존 토큰에 정의되지 않은 font size, line height, letter spacing 등의 값은 화면에서 직접 적용했습니다.
 
 ## 4. 직접 판단한 부분
 
 ### Toast
 관심종목 등록 / 해제 Toast는 2초 동안 노출되도록 했습니다.
+
 연속해서 관심 상태를 변경할 경우 이전 SnackBar를 먼저 제거한 뒤 새 Toast를 표시하도록 구현했습니다.
 
 ### 로딩 처리
 관심종목의 시세가 아직 도착하지 않은 경우 가격 영역에 Skeleton UI를 표시합니다.
+
 검색 중에는 Loading Indicator를 표시합니다.
 
 ### 네트워크 오류
@@ -142,13 +148,17 @@ API 요청 실패 시 빈 데이터로 오인하지 않도록 별도의 오류 �
 
 ### 일봉 데이터
 기간별 일봉 조회 시 화면에 보여줄 시작일보다 조금 이전의 데이터를 함께 가져옵니다.
+
 이를 통해 선택 기간의 첫 번째 거래일도 직전 거래일 대비 등락을 계산할 수 있도록 했습니다.
+
 이미 조회한 범위를 캐시에 보관해, 더 짧은 기간으로 변경할 때 불필요한 API 요청을 줄였습니다.
 
 ### Figma와의 차이
 관심종목과 검색 화면은 제공된 디자인 토큰과 Figma Inspect 값을 기준으로 간격, typography, 색상을 적용했습니다.
-종목 상세 화면은 기능 구현을 우선하여, 일부 세부 간격과 시각적 표현은 Figma와 차이가 있습니다.
-Material 기본 아이콘을 사용한 부분은 Figma 아이콘과 세부적인 형태에서 차이가 있을 수 있습니다.
+
+종목 상세 화면은 기능 구현을 완료했으나, 일부 세부 간격, 요약 영역 구성 및 차트 표현은 Figma와 차이가 있습니다.
+
+또한 Material 기본 아이콘을 사용한 일부 영역은 Figma 아이콘과 세부적인 형태 차이가 있습니다.
 
 ## 5. 구현 중 고민했던 부분
 
@@ -157,6 +167,7 @@ Material 기본 아이콘을 사용한 부분은 Figma 아이콘과 세부적인
 
 ### 검색 응답 순서
 사용자가 빠르게 검색어를 변경하면 이전 요청이 늦게 도착해 최신 결과를 덮어쓸 수 있습니다.
+
 따라서 요청 당시 검색어와 현재 검색어를 비교하여, 이미 오래된 검색 응답은 화면에 반영하지 않도록 처리했습니다.
 
 ### 기간별 일봉
@@ -164,4 +175,5 @@ Material 기본 아이콘을 사용한 부분은 Figma 아이콘과 세부적인
 
 ### 공통 UI
 관심종목 목록과 검색 결과 목록의 기본 구조가 동일하여 종목명 / 종목코드 / 시장 영역을 포함한 공통 `StockListRow` 위젯으로 분리했습니다.
+
 하단 Navigation 역시 관심 화면과 검색 화면에서 동일하게 사용하므로 공통 위젯으로 분리했습니다.
